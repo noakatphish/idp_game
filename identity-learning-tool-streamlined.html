@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Identity Terms Learning Tool - Streamlined</title>
+  <style>
+    /* Basic styling */
+    :root {
+      --primary-color: #3b82f6;
+      --primary-hover: #2563eb;
+      --secondary-color: #6b7280;
+      --secondary-hover: #4b5563;
+      --success-color: #10b981;
+      --error-color: #ef4444;
+      --bg-color: #f3f4f6;
+      --card-color: #ffffff;
+      --text-color: #1f2937;
+      --text-secondary: #6b7280;
+      --border-color: #e5e7eb;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.5;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+      position: relative;
+    }
+    
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 0.375rem;
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+    
+    .btn-secondary {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background-color: var(--secondary-hover);
+    }
+    
+    .btn-success {
+      background-color: var(--success-color);
+      color: white;
+    }
+    
+    .btn-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      font-size: 20px;
+      border-radius: 50%;
+    }
+    
+    .card {
+      background-color: var(--card-color);
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .menu-card {
+      background-color: var(--card-color);
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+    }
+    
+    .menu-card:hover {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+    
+    .menu-card-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .menu-card-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--primary-color);
+    }
+    
+    .menu-card-desc {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+    
+    .flashcard {
+      width: 100%;
+      max-width: 500px;
+      height: 300px;
+      margin: 0 auto 1.5rem;
+      perspective: 1000px;
+    }
+    
+    .flashcard-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    
+    .flashcard-front, .flashcard-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      box-sizing: border-box;
+    }
+    
+    .flashcard-front {
+      background-color: var(--card-color);
+    }
+    
+    .flashcard-back {
+      background-color: var(--primary-color);
+      color: white;
+      display: none;
+    }
+    
+    .star-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .memory-card {
+      aspect-ratio: 1 / 1;
+      background-color: #4b5563;
+      border-radius: 0.375rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    
+    .memory-card.flipped {
+      background-color: var(--primary-color);
+    }
+    
+    .memory-card.matched {
+      background-color: var(--success-color);
+    }
+    
+    .memory-card-content {
+      padding: 0.5rem;
+      text-align: center;
+      font-size: 0.875rem;
+      word-break: break-word;
+    }
+    
+    .quiz-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .quiz-progress {
+      height: 8px;
+      background-color: #e5e7eb;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    
+    .quiz-progress-bar {
+      height: 100%;
+      background-color: var(--primary-color);
+      transition: width 0.3s;
+    }
+    
+    .quiz-option {
+      width: 100%;
+      text-align: left;
+      background-color: #f9fafb;
+      border: 1px solid var(--border-color);
+      border-radius: 0.375rem;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.75rem;
+      font-weight: 500;
+    }
+    
+    .quiz-option:hover:not(.correct):not(.incorrect) {
+      background-color: #f3f4f6;
+    }
+    
+    .quiz-option.correct {
+      background-color: #d1fae5;
+      border-color: #10b981;
+    }
+    
+    .quiz-option.incorrect {
+      background-color: #fee2e2;
+      border-color: #ef4444;
+    }
+    
+    .feedback {
+      padding: 0.75rem;
+      border-radius: 0.375rem;
+      margin-bottom: 1rem;
+    }
+    
+    .feedback.correct {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+    
+    .feedback.incorrect {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    input, textarea, select {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 0.375rem;
+      font-family: inherit;
+      font-size: inherit;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    th {
+      font-weight: 600;
+      background-color: #f9fafb;
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    
+    .modal {
+      background-color: var(--card-color);
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    /* Utility Menu */
+    .utility-menu {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      display: flex;
+      gap: 0.5rem;
+      z-index: 100;
+    }
+    
+    .utility-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      background-color: var(--card-color);
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: all 0.2s;
+    }
+    
+    .utility-icon:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .utility-icon-tooltip {
+      position: relative;
+    }
+    
+    .utility-icon-tooltip::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 4px 8px;
+      background-color: rgba(0,0,0,0.7);
+      color: white;
+      border-radius: 4px;
+      font-size: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+    
+    .utility-icon-tooltip:hover::after {
+      opacity: 1;
+    }
+    
+    /* Utils */
+    .flex {
+      display: flex;
+    }
+    
+    .flex-col {
+      flex-direction: column;
+    }
+    
+    .items-center {
+      align-items: center;
+    }
+    
+    .justify-between {
+      justify-content: space-between;
+    }
+    
+    .justify-center {
+      justify-content: center;
+    }
+    
+    .space-x-2 > * + * {
+      margin-left: 0.5rem;
+    }
+    
+    .space-y-2 > * + * {
+      margin-top: 0.5rem;
+    }
+    
+    .w-full {
+      width: 100%;
+    }
+    
+    .text-center {
+      text-align: center;
+    }
+    
+    .text-lg {
+      font-size: 1.125rem;
+    }
+    
+    .text-xl {
+      font-size: 1.25rem;
+    }
+    
+    .text-2xl {
+      font-size: 1.5rem;
+    }
+    
+    .text-3xl {
+      font-size: 1.875rem;
+    }
+    
+    .font-bold {
+      font-weight: 700;
+    }
+    
+    .mb-1 {
+      margin-bottom: 0.25rem;
+    }
+    
+    .mb-2 {
+      margin-bottom: 0.5rem;
+    }
+    
+    .mb-4 {
+      margin-bottom: 1rem;
+    }
+    
+    .mb-6 {
+      margin-bottom: 1.5rem;
+    }
+    
+    .mb-8 {
+      margin-bottom: 2rem;
+    }
+    
+    .mt-2 {
+      margin-top: 0.5rem;
+    }
+    
+    .mt-4 {
+      margin-top: 1rem;
+    }
+    
+    .mt-6 {
+      margin-top: 1.5rem;
+    }
+    
+    .mr-2 {
+      margin-right: 0.5rem;
+    }
+    
+    .mx-auto {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .p-2 {
+      padding: 0.5rem;
+    }
+    
+    .p-4 {
+      padding: 1rem;
+    }
+    
+    .rounded {
+      border-radius: 0.375rem;
+    }
+    
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="container">
+    <!-- Utility menu in top right for term management and import/export -->
+    <div class="utility-menu">
+      <div class="utility-icon utility-icon-tooltip" data-tooltip="Manage Terms" onclick="renderView('manager')">
+        📝
+      </div>
+      <div class="utility-icon utility-icon-tooltip" data-tooltip="Import/Export" onclick="renderView('import-export')">
+        💾
+      </div>
+    </div>
+    
+    <div id="header" class="header">
+      <button id="backButton" class="btn-secondary hidden">← Back to Menu</button>
+      <h1 id="appTitle">Identity Terms Learning Tool</h1>
+      <div></div> <!-- Spacer for alignment -->
+    </div>
+    
+    <div id="mainContent">
+      <!-- Content will be dynamically inserted here -->
+    </div>
+    
+    <div class="text-center mt-6 text-secondary">
+      <p>Identity Terms Learning Tool - Streamlined Edition</p>
+    </div>
+  </div>
+  
+  <script>
+    // Default data
+    const defaultIdentityTerms = [
+      { id: 1, term: "IdP", definition: "Identity Provider - A system entity that creates, maintains, and manages identity information for principals and provides authentication services to applications." },
+      { id: 2, term: "IAM", definition: "Identity and Access Management - Framework of policies and technologies for ensuring the right individuals access the right resources at the right times for the right reasons." },
+      { id: 3, term: "IGA", definition: "Identity Governance and Administration - Comprehensive approach that combines identity lifecycle management with access governance to ensure appropriate access rights and control." },
+      { id: 4, term: "CIAM", definition: "Customer Identity and Access Management - Systems that manage customer identities and access to enhance customer experience while maintaining security." },
+      { id: 5, term: "RBAC", definition: "Role-Based Access Control - Access control approach where permissions are associated with roles, and users are assigned to appropriate roles." },
+      { id: 6, term: "ABAC", definition: "Attribute-Based Access Control - Access control paradigm where access is granted based on attributes associated with users, resources, actions, and environment." },
+      { id: 7, term: "PBAC", definition: "Policy-Based Access Control - Access control approach where authorization decisions are made based on explicit policies." },
+      { id: 8, term: "ISPM", definition: "Identity Security Posture Management - Practices and tools that help organizations assess, monitor, and improve their overall identity security posture." },
+      { id: 9, term: "MFA", definition: "Multi-Factor Authentication - Authentication method requiring users to provide two or more verification factors to gain access." },
+      { id: 10, term: "SSO", definition: "Single Sign-On - Authentication process that allows users to access multiple applications with one set of credentials." },
+      { id: 11, term: "OAuth", definition: "Open standard authorization protocol that allows third-party applications limited access to user accounts on services." },
+      { id: 12, term: "OIDC", definition: "OpenID Connect - Authentication layer built on top of OAuth 2.0 that allows clients to verify user identity and obtain basic profile information." },
+      { id: 13, term: "LDAP", definition: "Lightweight Directory Access Protocol - Open, vendor-neutral protocol for accessing and maintaining directory services." },
+      { id: 14, term: "AD", definition: "Active Directory - Microsoft's directory service for Windows domain networks, storing information about objects on the network." },
+      { id: 15, term: "SCIM", definition: "System for Cross-domain Identity Management - Open standard for automating the exchange of user identity information between systems." },
+      { id: 16, term: "PAM", definition: "Privileged Access Management - Technologies and strategies to control, monitor, and secure privileged access to critical systems." },
+      { id: 17, term: "JIT", definition: "Just-In-Time Access - Approach where privileged access rights are provided only when needed and for a limited time." },
+      { id: 18, term: "Zero Trust", definition: "Security model that requires strict identity verification for every person and device trying to access resources, regardless of location." },
+      { id: 19, term: "JML", definition: "Joiner-Mover-Leaver - Framework that defines the identity lifecycle from when a user joins an organization, moves within it, and eventually leaves." },
+      { id: 20, term: "SAML", definition: "Security Assertion Markup Language - XML-based open standard for exchanging authentication and authorization data between parties." },
+      { id: 21, term: "PIV", definition: "Personal Identity Verification - U.S. federal standard for secure identity credentials used for physical and logical access." },
+      { id: 22, term: "FIDO", definition: "Fast Identity Online - Set of open authentication standards aimed at reducing reliance on passwords through various authentication methods." },
+      { id: 23, term: "WebAuthn", definition: "Web Authentication API - Core component of FIDO2 that allows servers to register and authenticate users using public key cryptography." },
+      { id: 24, term: "TOTP", definition: "Time-based One-Time Password - Temporary password algorithm that generates a one-time password which uses the current time as an input." },
+      { id: 25, term: "SIEM", definition: "Security Information and Event Management - Software that provides real-time analysis of security alerts generated by applications and network hardware." },
+      { id: 26, term: "UEBA", definition: "User and Entity Behavior Analytics - Technology that uses machine learning to detect anomalies in user behavior that may indicate security threats." },
+      { id: 27, term: "SOC", definition: "Security Operations Center - Centralized unit dealing with security issues on an organizational and technical level." },
+      { id: 28, term: "PIM", definition: "Privileged Identity Management - Solution that helps organizations restrict, manage, and monitor privileged account access." },
+      { id: 29, term: "IDaaS", definition: "Identity as a Service - Cloud-based authentication infrastructure that an organization can subscribe to, rather than build." },
+      { id: 30, term: "CASB", definition: "Cloud Access Security Broker - Security policy enforcement point placed between cloud service consumers and providers to enforce security policies." }
+    ];
+    
+    const defaultQuizQuestions = [
+      {
+        question: "What does IdP stand for?",
+        options: [
+          "Identity Protocol", 
+          "Identity Provider", 
+          "Identity Platform", 
+          "Identity Process"
+        ],
+        correctAnswer: "Identity Provider"
+      },
+      {
+        question: "Which access control approach associates permissions with roles?",
+        options: ["ABAC", "PBAC", "RBAC", "Zero Trust"],
+        correctAnswer: "RBAC"
+      },
+      {
+        question: "Which of these is built on top of OAuth 2.0?",
+        options: ["LDAP", "SCIM", "OIDC", "SAML"],
+        correctAnswer: "OIDC"
+      },
+      {
+        question: "What does JML stand for in the identity lifecycle?",
+        options: [
+          "Java Markup Language", 
+          "Joiner-Mover-Leaver", 
+          "Joint Management Layer", 
+          "JSON Manipulation Logic"
+        ],
+        correctAnswer: "Joiner-Mover-Leaver"
+      },
+      {
+        question: "Which security model requires strict identity verification for every person and device?",
+        options: ["RBAC", "PAM", "SSO", "Zero Trust"],
+        correctAnswer: "Zero Trust"
+      },
+      {
+        question: "What does MFA stand for?",
+        options: [
+          "Multi-Factor Authentication", 
+          "Main Factor Authorization", 
+          "Multiple Form Access", 
+          "Managed Factor Assignment"
+        ],
+        correctAnswer: "Multi-Factor Authentication"
+      },
+      {
+        question: "Which protocol is used for accessing and maintaining directory services?",
+        options: ["OAuth", "LDAP", "OIDC", "SCIM"],
+        correctAnswer: "LDAP"
+      },
+      {
+        question: "What does CIAM focus on?",
+        options: [
+          "Corporate Identity Administration", 
+          "Customer Identity and Access Management", 
+          "Credential Integration and Management", 
+          "Controlled Identity Access Model"
+        ],
+        correctAnswer: "Customer Identity and Access Management"
+      },
+      {
+        question: "Which access control grants access based on attributes associated with users, resources, and environment?",
+        options: ["RBAC", "ABAC", "PBAC", "JIT"],
+        correctAnswer: "ABAC"
+      },
+      {
+        question: "What does ISPM stand for?",
+        options: [
+          "Identity Service Provider Management", 
+          "Information Security Process Mapping", 
+          "Identity Security Posture Management", 
+          "Integrated Security Policy Management"
+        ],
+        correctAnswer: "Identity Security Posture Management"
+      }
+    ];
+    
+    // Global app state (in-memory only, no localStorage)
+    let app = {
+      currentView: 'menu',
+      terms: [...defaultIdentityTerms], // Use default terms initially
+      quizQuestions: [...defaultQuizQuestions], // Use default questions initially
+      starredTerms: [],
+      customTerms: [],
+      
+      // Flashcard state
+      flashcards: {
+        currentIndex: 0,
+        isFlipped: false,
+        deckSize: 30, // Increased default deck size to 30
+        currentDeck: []
+      },
+      
+      // Memory game state
+      memory: {
+        cards: [],
+        flippedCards: [],
+        matchedPairs: 0,
+        turns: 0
+      },
+      
+      // Quiz state
+      quiz: {
+        currentQuestion: 0,
+        score: 0,
+        selectedAnswer: null,
+        isAnswered: false,
+        showResults: false,
+        shuffledQuestions: []
+      }
+    };
+    
+    // DOM elements
+    const elements = {
+      mainContent: document.getElementById('mainContent'),
+      backButton: document.getElementById('backButton'),
+      appTitle: document.getElementById('appTitle')
+    };
+    
+    // Initialize the app
+    function init() {
+      // Set up event listeners
+      elements.backButton.addEventListener('click', goToMenu);
+      
+      // Render the initial view
+      renderView('menu');
+    }
+    
+    // Navigation functions
+    function renderView(view) {
+      app.currentView = view;
+      
+      // Update header and visibility of utility menu
+      if (view === 'menu') {
+        elements.backButton.classList.add('hidden');
+        elements.appTitle.textContent = 'Identity Terms Learning Tool';
+        document.querySelectorAll('.utility-menu div').forEach(el => {
+          el.style.display = 'flex';
+        });
+      } else {
+        elements.backButton.classList.remove('hidden');
+        elements.appTitle.textContent = view === 'flashcards' ? 'Flashcards' : 
+                                        view === 'memory' ? 'Memory Game' : 
+                                        view === 'quiz' ? 'Quiz' : 
+                                        view === 'manager' ? 'Term Manager' : 
+                                        'Import/Export';
+        
+        // Hide utility icons when on those pages
+        document.querySelectorAll('.utility-menu div').forEach(el => {
+          if ((view === 'manager' && el.getAttribute('data-tooltip') === 'Manage Terms') || 
+              (view === 'import-export' && el.getAttribute('data-tooltip') === 'Import/Export')) {
+            el.style.display = 'none';
+          } else {
+            el.style.display = 'flex';
+          }
+        });
+      }
+      
+      // Render the appropriate view
+      switch (view) {
+        case 'menu':
+          renderMenu();
+          break;
+        case 'flashcards':
+          initFlashcards();
+          renderFlashcards();
+          break;
+        case 'memory':
+          initMemoryGame();
+          renderMemoryGame();
+          break;
+        case 'quiz':
+          initQuiz();
+          renderQuiz();
+          break;
+        case 'manager':
+          renderTermManager();
+          break;
+        case 'import-export':
+          renderImportExport();
+          break;
+      }
+    }
+    
+    function goToMenu() {
+      renderView('menu');
+    }
+    
+    // Render main menu
+    function renderMenu() {
+      const menuHTML = `
+        <div class="text-center mb-8">
+          <h2 class="text-3xl font-bold mb-2">Study Identity Terms</h2>
+          <p class="text-secondary">${app.terms.length} Terms Available</p>
+        </div>
+        
+        <div class="menu-grid">
+          <div class="menu-card" onclick="renderView('flashcards')">
+            <div class="menu-card-icon">📇</div>
+            <div class="menu-card-title">Flashcards</div>
+            <div class="menu-card-desc">Review terms and definitions with digital flashcards</div>
+          </div>
+          
+          <div class="menu-card" onclick="renderView('memory')">
+            <div class="menu-card-icon">🎮</div>
+            <div class="menu-card-title">Memory Game</div>
+            <div class="menu-card-desc">Match terms with their definitions in a memory game</div>
+          </div>
+          
+          <div class="menu-card" onclick="renderView('quiz')">
+            <div class="menu-card-icon">❓</div>
+            <div class="menu-card-title">Quiz</div>
+            <div class="menu-card-desc">Test your knowledge with a multiple-choice quiz</div>
+          </div>
+        </div>
+        
+        <div class="card mt-6 p-4 text-center">
+          <p><strong>Note:</strong> This version works without localStorage, so your changes won't be saved when you close the browser.</p>
+        </div>
+      `;
+      
+      elements.mainContent.innerHTML = menuHTML;
+    }
+    
+    // Flashcards
+    function initFlashcards() {
+      // Set up flashcard deck
+      const deckSize = Math.min(app.flashcards.deckSize, app.terms.length);
+      app.flashcards.currentDeck = app.terms.slice(0, deckSize);
+      app.flashcards.currentIndex = 0;
+      app.flashcards.isFlipped = false;
+    }
+    
+    function renderFlashcards() {
+      const { currentIndex, isFlipped, currentDeck } = app.flashcards;
+      const currentTerm = currentDeck[currentIndex];
+      
+      if (!currentTerm) {
+        elements.mainContent.innerHTML = `
+          <div class="card text-center">
+            <p>No terms available. Add terms in the Term Manager.</p>
+            <button class="btn-primary mt-4" onclick="goToMenu()">Back to Menu</button>
+          </div>
+        `;
+        return;
+      }
+      
+      const isStarred = app.starredTerms.includes(currentTerm.id);
+      const progress = currentDeck.length > 1 ? (currentIndex / (currentDeck.length - 1)) * 100 : 100;
+      
+      const flashcardHTML = `
+        <div class="w-full max-w-md mx-auto">
+          <div class="flex justify-between items-center mb-4">
+            <div>
+              <label for="deckSize">Deck size:</label>
+              <select id="deckSize" onchange="changeDeckSize()">
+                <option value="16" ${app.flashcards.deckSize === 16 ? 'selected' : ''}>16</option>
+                <option value="20" ${app.flashcards.deckSize === 20 ? 'selected' : ''}>20</option>
+                <option value="30" ${app.flashcards.deckSize === 30 ? 'selected' : ''}>30</option>
+                <option value="${app.terms.length}" ${app.flashcards.deckSize === app.terms.length ? 'selected' : ''}>All (${app.terms.length})</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="mb-4" style="height: 8px; background-color: #e5e7eb; border-radius: 999px; overflow: hidden;">
+            <div style="height: 100%; width: ${progress}%; background-color: var(--primary-color);"></div>
+          </div>
+          
+          <p class="text-center mb-4">Card ${currentIndex + 1} of ${currentDeck.length}</p>
+          
+          <div class="flashcard">
+            <div class="flashcard-inner" onclick="flipCard()">
+              <button class="star-btn" onclick="toggleStarCard(event, ${currentTerm.id})">
+                ${isStarred ? '⭐' : '☆'}
+              </button>
+              
+              <div class="flashcard-front" style="${isFlipped ? 'display: none;' : ''}">
+                <h2 class="text-2xl font-bold">${currentTerm.term}</h2>
+              </div>
+              
+              <div class="flashcard-back" style="${isFlipped ? 'display: flex;' : ''}">
+                <p>${currentTerm.definition}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="nav-buttons">
+            <button class="btn-secondary" onclick="prevCard()">Previous</button>
+            <button class="btn-primary" onclick="nextCard()">Next</button>
+          </div>
+          
+          <p class="text-center text-secondary mt-4">
+            Click on the card to flip it<br>
+            Use arrow keys to navigate and spacebar to flip
+          </p>
+        </div>
+      `;
+      
+      elements.mainContent.innerHTML = flashcardHTML;
+      
+      // Set up keyboard navigation
+      document.onkeydown = function(e) {
+        if (app.currentView !== 'flashcards') return;
+        
+        switch(e.key) {
+          case 'ArrowLeft':
+            prevCard();
+            break;
+          case 'ArrowRight':
+            nextCard();
+            break;
+          case ' ':
+            flipCard();
+            e.preventDefault(); // Prevent page scrolling
+            break;
+        }
+      };
+    }
+    
+    function flipCard() {
+      app.flashcards.isFlipped = !app.flashcards.isFlipped;
+      renderFlashcards();
+    }
+    
+    function nextCard() {
+      const { currentIndex, currentDeck } = app.flashcards;
+      if (currentIndex < currentDeck.length - 1) {
+        app.flashcards.currentIndex++;
+      } else {
+        app.flashcards.currentIndex = 0;
+      }
+      app.flashcards.isFlipped = false;
+      renderFlashcards();
+    }
+    
+    function prevCard() {
+      const { currentIndex, currentDeck } = app.flashcards;
+      if (currentIndex > 0) {
+        app.flashcards.currentIndex--;
+      } else {
+        app.flashcards.currentIndex = currentDeck.length - 1;
+      }
+      app.flashcards.isFlipped = false;
+      renderFlashcards();
+    }
+    
+    function toggleStarCard(event, id) {
+      event.stopPropagation(); // Prevent card flip
+      
+      if (app.starredTerms.includes(id)) {
+        app.starredTerms = app.starredTerms.filter(termId => termId !== id);
+      } else {
+        app.starredTerms.push(id);
+      }
+      
+      renderFlashcards();
+    }
+    
+    function changeDeckSize() {
+      const select = document.getElementById('deckSize');
+      app.flashcards.deckSize = parseInt(select.value);
+      initFlashcards();
+      renderFlashcards();
+    }
+    
+    // Memory Game
+    function initMemoryGame() {
+      // Get a subset of terms based on difficulty (default: easy = 8 pairs)
+      const gameTerms = app.terms.slice(0, 8);
+      
+      // Create and shuffle the cards
+      const cardPairs = [];
+      
+      gameTerms.forEach(term => {
+        // Term card
+        cardPairs.push({
+          id: term.id,
+          content: term.term,
+          type: 'term',
+          isFlipped: false,
+          isMatched: false
+        });
+        
+        // Definition card - use short version for readability
+        const shortDef = term.definition.split(' - ')[0];
+        cardPairs.push({
+          id: term.id,
+          content: shortDef,
+          type: 'definition',
+          isFlipped: false,
+          isMatched: false
+        });
+      });
+      
+      // Shuffle the cards
+      app.memory.cards = shuffleArray([...cardPairs]);
+      app.memory.flippedCards = [];
+      app.memory.matchedPairs = 0;
+      app.memory.turns = 0;
+    }
+    
+    function renderMemoryGame() {
+      const { cards, matchedPairs, turns } = app.memory;
+      
+      if (cards.length === 0) {
+        elements.mainContent.innerHTML = `
+          <div class="card text-center">
+            <p>No terms available for the memory game. Add terms in the Term Manager.</p>
+            <button class="btn-primary mt-4" onclick="goToMenu()">Back to Menu</button>
+          </div>
+        `;
+        return;
+      }
+      
+      const gameCompleted = matchedPairs === cards.length / 2;
+      
+      const memoryGameHTML = `
+        <div class="text-center mb-6">
+          <button class="btn-primary mb-4" onclick="resetMemoryGame()">New Game</button>
+          <p>Turns: ${turns} | Pairs: ${matchedPairs} / ${cards.length / 2}</p>
+          ${gameCompleted ? `
+            <div class="card mt-4 mb-4" style="background-color: #d1fae5;">
+              <p class="text-success-color font-bold">Congratulations! You've matched all the pairs in ${turns} turns!</p>
+            </div>
+          ` : ''}
+        </div>
+        
+        <div class="memory-grid">
+          ${cards.map((card, index) => `
+            <div class="memory-card ${card.isFlipped ? 'flipped' : ''} ${card.isMatched ? 'matched' : ''}" 
+                onclick="flipMemoryCard(${index})" data-index="${index}">
+              ${card.isFlipped || card.isMatched ? 
+                `<div class="memory-card-content">${card.content}</div>` : 
+                '<div class="memory-card-content">?</div>'}
+            </div>
+          `).join('')}
+        </div>
+      `;
+      
+      elements.mainContent.innerHTML = memoryGameHTML;
+    }
+    
+    function flipMemoryCard(index) {
+      const { cards, flippedCards } = app.memory;
+      
+      // Ignore if card is already flipped or matched
+      if (cards[index].isFlipped || cards[index].isMatched) return;
+      
+      // Ignore if two cards are already flipped
+      if (flippedCards.length >= 2) return;
+      
+      // Flip the card
+      cards[index].isFlipped = true;
+      app.memory.flippedCards.push(index);
+      
+      // If two cards are flipped, check for a match
+      if (app.memory.flippedCards.length === 2) {
+        const card1 = cards[app.memory.flippedCards[0]];
+        const card2 = cards[app.memory.flippedCards[1]];
+        
+        app.memory.turns++;
+        
+        if (card1.id === card2.id && card1.type !== card2.type) {
+          // It's a match!
+          card1.isMatched = true;
+          card2.isMatched = true;
+          app.memory.matchedPairs++;
+          app.memory.flippedCards = [];
+        } else {
+          // Not a match, flip back after a delay
+          setTimeout(() => {
+            card1.isFlipped = false;
+            card2.isFlipped = false;
+            app.memory.flippedCards = [];
+            renderMemoryGame();
+          }, 1000);
+        }
+      }
+      
+      renderMemoryGame();
+    }
+    
+    function resetMemoryGame() {
+      initMemoryGame();
+      renderMemoryGame();
+    }
+    
+    // Quiz
+    function initQuiz() {
+      // Reset quiz state
+      app.quiz.currentQuestion = 0;
+      app.quiz.score = 0;
+      app.quiz.selectedAnswer = null;
+      app.quiz.isAnswered = false;
+      app.quiz.showResults = false;
+      
+      // Shuffle questions
+      app.quiz.shuffledQuestions = shuffleArray([...app.quizQuestions]).slice(0, 10); // Limit to 10 questions
+    }
+    
+    function renderQuiz() {
+      const { currentQuestion, score, selectedAnswer, isAnswered, showResults, shuffledQuestions } = app.quiz;
+      
+      if (shuffledQuestions.length === 0) {
+        elements.mainContent.innerHTML = `
+          <div class="card text-center">
+            <p>No quiz questions available. Please use the import feature to add questions.</p>
+            <button class="btn-primary mt-4" onclick="goToMenu()">Back to Menu</button>
+          </div>
+        `;
+        return;
+      }
+      
+      if (showResults) {
+        // Show quiz results
+        const percentage = Math.round((score / shuffledQuestions.length) * 100);
+        
+        const resultsHTML = `
+          <div class="quiz-container card text-center">
+            <h2 class="text-2xl font-bold mb-4">Quiz Complete!</h2>
+            <p class="text-xl mb-6">
+              You scored ${score} out of ${shuffledQuestions.length}
+              <span class="block mt-2 text-lg">(${percentage}%)</span>
+            </p>
+            <button class="btn-primary" onclick="restartQuiz()">Restart Quiz</button>
+          </div>
+        `;
+        
+        elements.mainContent.innerHTML = resultsHTML;
+      } else {
+        // Show current question
+        const question = shuffledQuestions[currentQuestion];
+        const progress = (currentQuestion / shuffledQuestions.length) * 100;
+        
+        const questionHTML = `
+          <div class="quiz-container">
+            <div class="flex justify-between items-center mb-2">
+              <span>Question ${currentQuestion + 1} of ${shuffledQuestions.length}</span>
+              <span>Score: ${score}/${currentQuestion}</span>
+            </div>
+            
+            <div class="quiz-progress">
+              <div class="quiz-progress-bar" style="width: ${progress}%"></div>
+            </div>
+            
+            <div class="card mb-4">
+              <h2 class="text-xl font-bold mb-4">${question.question}</h2>
+              
+              <div class="space-y-2">
+                ${question.options.map(option => `
+                  <button 
+                    class="quiz-option ${isAnswered ? 
+                      (option === question.correctAnswer ? 'correct' : 
+                       option === selectedAnswer ? 'incorrect' : '') : ''}" 
+                    onclick="selectAnswer('${option}')"
+                    ${isAnswered ? 'disabled' : ''}
+                  >
+                    ${option}
+                  </button>
+                `).join('')}
+              </div>
+              
+              ${isAnswered ? `
+                <div class="feedback ${selectedAnswer === question.correctAnswer ? 'correct' : 'incorrect'}">
+                  ${selectedAnswer === question.correctAnswer ? 
+                    'Correct!' : 
+                    `Incorrect. The correct answer is: ${question.correctAnswer}`}
+                </div>
+              ` : ''}
+              
+              <button 
+                class="btn-primary w-full mt-4" 
+                onclick="nextQuestion()"
+                ${!isAnswered ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}
+              >
+                ${currentQuestion < shuffledQuestions.length - 1 ? 'Next Question' : 'Finish Quiz'}
+              </button>
+            </div>
+          </div>
+        `;
+        
+        elements.mainContent.innerHTML = questionHTML;
+      }
+    }
+    
+    function selectAnswer(answer) {
+      if (app.quiz.isAnswered) return;
+      
+      app.quiz.selectedAnswer = answer;
+      app.quiz.isAnswered = true;
+      
+      const currentQuestion = app.quiz.shuffledQuestions[app.quiz.currentQuestion];
+      
+      if (answer === currentQuestion.correctAnswer) {
+        app.quiz.score++;
+      }
+      
+      renderQuiz();
+    }
+    
+    function nextQuestion() {
+      if (!app.quiz.isAnswered) return;
+      
+      if (app.quiz.currentQuestion < app.quiz.shuffledQuestions.length - 1) {
+        app.quiz.currentQuestion++;
+        app.quiz.selectedAnswer = null;
+        app.quiz.isAnswered = false;
+      } else {
+        app.quiz.showResults = true;
+      }
+      
+      renderQuiz();
+    }
+    
+    function restartQuiz() {
+      initQuiz();
+      renderQuiz();
+    }
+    
+    // Term Manager
+    function renderTermManager() {
+      const managerHTML = `
+        <div class="w-full max-w-4xl mx-auto">
+          <div class="card mb-6">
+            <h2 class="text-xl font-bold mb-4">Add New Term</h2>
+            <form id="termForm" onsubmit="addTerm(event)">
+              <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+                <div class="flex-1">
+                  <label for="term">Term</label>
+                  <input type="text" id="term" placeholder="Enter term (e.g. IAM)" required>
+                </div>
+                <div class="flex-1">
+                  <label for="definition">Definition</label>
+                  <textarea id="definition" placeholder="Enter definition" rows="2" required></textarea>
+                </div>
+              </div>
+              <div class="flex justify-end mt-4">
+                <button type="submit" class="btn-primary">Add Term</button>
+              </div>
+            </form>
+          </div>
+          
+          <div class="card">
+            <h2 class="text-xl font-bold mb-4">Terms (${app.terms.length})</h2>
+            <div style="overflow-x: auto;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Term</th>
+                    <th>Definition</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${app.terms.map((term, index) => `
+                    <tr>
+                      <td>${term.id}</td>
+                      <td class="font-bold">${term.term}</td>
+                      <td>${term.definition}</td>
+                      <td>
+                        <button onclick="editTerm(${index})" class="text-primary-color mr-2">Edit</button>
+                        <button onclick="deleteTerm(${index})" class="text-error-color">Delete</button>
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <div class="card mt-6 p-4 text-center">
+            <p><strong>Note:</strong> Changes to terms are not saved permanently in this version. They will be lost when you refresh the page.</p>
+          </div>
+        </div>
+      `;
+      
+      elements.mainContent.innerHTML = managerHTML;
+    }
+    
+    function addTerm(event) {
+      event.preventDefault();
+      
+      const termInput = document.getElementById('term');
+      const definitionInput = document.getElementById('definition');
+      
+      const term = termInput.value.trim();
+      const definition = definitionInput.value.trim();
+      
+      if (!term || !definition) return;
+      
+      // Generate a unique ID
+      const newId = app.terms.length > 0 ? Math.max(...app.terms.map(t => t.id)) + 1 : 1;
+      
+      // Add the new term
+      app.terms.push({
+        id: newId,
+        term,
+        definition
+      });
+      
+      // Reset form
+      termInput.value = '';
+      definitionInput.value = '';
+      
+      // Re-render the manager
+      renderTermManager();
+    }
+    
+    function editTerm(index) {
+      const term = app.terms[index];
+      
+      const editFormHTML = `
+        <div class="modal-overlay">
+          <div class="modal">
+            <h2 class="text-xl font-bold mb-4">Edit Term</h2>
+            <form id="editForm" onsubmit="updateTerm(event, ${index})">
+              <div class="form-group">
+                <label for="editTerm">Term</label>
+                <input type="text" id="editTerm" value="${term.term}" required>
+              </div>
+              <div class="form-group">
+                <label for="editDefinition">Definition</label>
+                <textarea id="editDefinition" rows="3" required>${term.definition}</textarea>
+              </div>
+              <div class="flex justify-end space-x-2">
+                <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button type="submit" class="btn-primary">Update</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      `;
+      
+      // Add the modal to the DOM
+      const modalContainer = document.createElement('div');
+      modalContainer.id = 'modalContainer';
+      modalContainer.innerHTML = editFormHTML;
+      document.body.appendChild(modalContainer);
+    }
+    
+    function updateTerm(event, index) {
+      event.preventDefault();
+      
+      const termInput = document.getElementById('editTerm');
+      const definitionInput = document.getElementById('editDefinition');
+      
+      const term = termInput.value.trim();
+      const definition = definitionInput.value.trim();
+      
+      if (!term || !definition) return;
+      
+      // Update the term
+      app.terms[index].term = term;
+      app.terms[index].definition = definition;
+      
+      // Close the modal
+      closeModal();
+      
+      // Re-render the manager
+      renderTermManager();
+    }
+    
+    function deleteTerm(index) {
+      if (!confirm('Are you sure you want to delete this term?')) return;
+      
+      // Remove the term
+      app.terms.splice(index, 1);
+      
+      // Re-render the manager
+      renderTermManager();
+    }
+    
+    function closeModal() {
+      const modalContainer = document.getElementById('modalContainer');
+      if (modalContainer) {
+        document.body.removeChild(modalContainer);
+      }
+    }
+    
+    // Import/Export
+    function renderImportExport() {
+      const importExportHTML = `
+        <div class="w-full max-w-4xl mx-auto">
+          <div class="card mb-6">
+            <h2 class="text-xl font-bold mb-4">Export Terms</h2>
+            <p class="mb-4">Export your terms to a JSON string that you can copy and save.</p>
+            <textarea id="exportData" rows="10" readonly class="mb-4">${JSON.stringify(app.terms, null, 2)}</textarea>
+            <button class="btn-primary" onclick="copyToClipboard('exportData')">Copy to Clipboard</button>
+          </div>
+          
+          <div class="card">
+            <h2 class="text-xl font-bold mb-4">Import Terms</h2>
+            <p class="mb-4">Import terms from a JSON string. The data should contain an array of objects with 'term' and 'definition' properties.</p>
+            <div class="mb-4">
+              <textarea id="importData" rows="10" placeholder="Paste JSON data here"></textarea>
+            </div>
+            <div class="flex space-x-2">
+              <button class="btn-primary" onclick="importTerms()">Import Terms</button>
+              <button class="btn-secondary" onclick="resetToDefaults()">Reset to Defaults</button>
+            </div>
+          </div>
+          
+          <div class="card mt-6 p-4 text-center">
+            <p><strong>Note:</strong> Since localStorage is not available, you'll need to save your exported terms elsewhere and reimport them each time you reload the page.</p>
+          </div>
+        </div>
+      `;
+      
+      elements.mainContent.innerHTML = importExportHTML;
+    }
+    
+    function copyToClipboard(elementId) {
+      const textarea = document.getElementById(elementId);
+      textarea.select();
+      document.execCommand('copy');
+      alert('Copied to clipboard!');
+    }
+    
+    function importTerms() {
+      const importData = document.getElementById('importData').value;
+      
+      try {
+        const terms = JSON.parse(importData);
+        
+        if (!Array.isArray(terms)) {
+          throw new Error('Imported data must be an array');
+        }
+        
+        // Validate each term
+        terms.forEach(term => {
+          if (!term.term || !term.definition) {
+            throw new Error('Each term must have a "term" and "definition" property');
+          }
+        });
+        
+        // Assign new IDs if needed
+        const importedTerms = terms.map((term, index) => ({
+          id: term.id || index + 1,
+          term: term.term,
+          definition: term.definition
+        }));
+        
+        // Update the app state
+        app.terms = importedTerms;
+        
+        // Show success message
+        alert('Terms imported successfully!');
+        
+        // Go back to the menu
+        goToMenu();
+      } catch (error) {
+        alert('Error importing terms: ' + error.message);
+      }
+    }
+    
+    function resetToDefaults() {
+      if (!confirm('Are you sure you want to reset to the default terms? This will replace all your custom terms.')) return;
+      
+      // Reset to defaults
+      app.terms = [...defaultIdentityTerms];
+      app.quizQuestions = [...defaultQuizQuestions];
+      app.starredTerms = [];
+      
+      // Show success message
+      alert('Reset to defaults successfully!');
+      
+      // Go back to the menu
+      goToMenu();
+    }
+    
+    // Utility functions
+    function shuffleArray(array) {
+      const newArray = [...array];
+      for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+      }
+      return newArray;
+    }
+    
+    // Make functions available globally
+    window.renderView = renderView;
+    window.goToMenu = goToMenu;
+    window.flipCard = flipCard;
+    window.nextCard = nextCard;
+    window.prevCard = prevCard;
+    window.toggleStarCard = toggleStarCard;
+    window.changeDeckSize = changeDeckSize;
+    window.flipMemoryCard = flipMemoryCard;
+    window.resetMemoryGame = resetMemoryGame;
+    window.selectAnswer = selectAnswer;
+    window.nextQuestion = nextQuestion;
+    window.restartQuiz = restartQuiz;
+    window.addTerm = addTerm;
+    window.editTerm = editTerm;
+    window.updateTerm = updateTerm;
+    window.deleteTerm = deleteTerm;
+    window.closeModal = closeModal;
+    window.copyToClipboard = copyToClipboard;
+    window.importTerms = importTerms;
+    window.resetToDefaults = resetToDefaults;
+    
+    // Initialize the app when the page loads
+    window.onload = init;
+  </script>
+</body>
+</html>
