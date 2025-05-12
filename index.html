@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -216,6 +217,24 @@
       cursor: pointer;
       box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
       overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .memory-grid.grid-cols-4 .memory-card {
+      height: 120px;
+    }
+    
+    .memory-grid.grid-cols-5 .memory-card {
+      height: 100px;
+    }
+    
+    .memory-grid.grid-cols-6 .memory-card {
+      height: 80px;
+    }
+    
+    .memory-card:hover:not(.matched) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
     
     .memory-card.flipped {
@@ -224,6 +243,7 @@
     
     .memory-card.matched {
       background-color: var(--success-color);
+      transform: scale(0.95);
     }
     
     .memory-card-content {
@@ -659,6 +679,156 @@
           "Integrated Security Policy Management"
         ],
         correctAnswer: "Identity Security Posture Management"
+      },
+      {
+        question: "What does SAML stand for?",
+        options: [
+          "Security Authentication Management Language",
+          "Security Assertion Markup Language",
+          "System Access Management Layer",
+          "Secure Access Method Library"
+        ],
+        correctAnswer: "Security Assertion Markup Language"
+      },
+      {
+        question: "What is the primary purpose of Privileged Access Management (PAM)?",
+        options: [
+          "To manage end-user access to applications",
+          "To control, monitor, and secure privileged access to critical systems",
+          "To facilitate single sign-on for regular users",
+          "To manage customer identity information"
+        ],
+        correctAnswer: "To control, monitor, and secure privileged access to critical systems"
+      },
+      {
+        question: "What does CASB stand for?",
+        options: [
+          "Customer Access Security Broker",
+          "Cloud Authentication Services Baseline",
+          "Cloud Access Security Broker",
+          "Customer Authentication Service Base"
+        ],
+        correctAnswer: "Cloud Access Security Broker"
+      },
+      {
+        question: "What is the primary function of SCIM?",
+        options: [
+          "To facilitate centralized management of security policies",
+          "To automate the exchange of user identity information between systems",
+          "To provide multi-factor authentication services",
+          "To enforce access control policies"
+        ],
+        correctAnswer: "To automate the exchange of user identity information between systems"
+      },
+      {
+        question: "What does WebAuthn allow?",
+        options: [
+          "Automated web content creation",
+          "Web-based authentication using public key cryptography",
+          "Authorization of web applications to use personal data",
+          "Automatic web page translation"
+        ],
+        correctAnswer: "Web-based authentication using public key cryptography"
+      },
+      {
+        question: "What is the main function of UEBA?",
+        options: [
+          "To unify enterprise business applications",
+          "To provide user experience benchmarking and analysis",
+          "To detect anomalies in user behavior that may indicate security threats",
+          "To understand employee behavior for HR purposes"
+        ],
+        correctAnswer: "To detect anomalies in user behavior that may indicate security threats"
+      },
+      {
+        question: "What does SIEM technology primarily do?",
+        options: [
+          "Manages social identity across multiple platforms",
+          "Provides real-time analysis of security alerts from applications and hardware",
+          "Secures internet-enabled mobile devices",
+          "Standardizes identity management practices"
+        ],
+        correctAnswer: "Provides real-time analysis of security alerts from applications and hardware"
+      },
+      {
+        question: "What does TOTP use to generate a one-time password?",
+        options: [
+          "User's biometric data",
+          "Random number generator",
+          "Current time",
+          "Physical location data"
+        ],
+        correctAnswer: "Current time"
+      },
+      {
+        question: "What is the main purpose of Just-In-Time (JIT) Access?",
+        options: [
+          "To provide instant access to all systems",
+          "To provide privileged access rights only when needed and for a limited time",
+          "To speed up login processes",
+          "To reduce network latency during authentication"
+        ],
+        correctAnswer: "To provide privileged access rights only when needed and for a limited time"
+      },
+      {
+        question: "What is IDaaS?",
+        options: [
+          "Identity Deployment as a Service",
+          "Identity as a Service",
+          "Identity Documentation and Storage",
+          "Internal Directory and Access Services"
+        ],
+        correctAnswer: "Identity as a Service"
+      },
+      {
+        question: "What does PIV stand for?",
+        options: [
+          "Personal Identity Verification",
+          "Privacy Information Validation",
+          "Protected Identity Vector",
+          "Personal Information Vault"
+        ],
+        correctAnswer: "Personal Identity Verification"
+      },
+      {
+        question: "What is Active Directory primarily used for?",
+        options: [
+          "Monitoring network traffic",
+          "Managing Windows domain networks and storing information about network objects",
+          "Actively scanning for directory-based threats",
+          "Directing network traffic to appropriate servers"
+        ],
+        correctAnswer: "Managing Windows domain networks and storing information about network objects"
+      },
+      {
+        question: "What is the main purpose of a Security Operations Center (SOC)?",
+        options: [
+          "To develop security software",
+          "To deal with security issues on organizational and technical levels",
+          "To operate security cameras and physical access controls",
+          "To secure operational centers against cyber attacks"
+        ],
+        correctAnswer: "To deal with security issues on organizational and technical levels"
+      },
+      {
+        question: "What is the main goal of Identity Governance and Administration (IGA)?",
+        options: [
+          "To authenticate users across multiple systems",
+          "To combine identity lifecycle management with access governance",
+          "To govern access to physical locations",
+          "To administer encryption keys"
+        ],
+        correctAnswer: "To combine identity lifecycle management with access governance"
+      },
+      {
+        question: "Which of these is the main function of FIDO authentication standards?",
+        options: [
+          "To standardize identity federation",
+          "To reduce reliance on passwords through alternative authentication methods",
+          "To identify domain owners for web security",
+          "To facilitate data encryption across devices"
+        ],
+        correctAnswer: "To reduce reliance on passwords through alternative authentication methods"
       }
     ];
     
@@ -683,7 +853,8 @@
         cards: [],
         flippedCards: [],
         matchedPairs: 0,
-        turns: 0
+        turns: 0,
+        difficulty: 'easy' // New property to track difficulty
       },
       
       // Quiz state
@@ -693,7 +864,8 @@
         selectedAnswer: null,
         isAnswered: false,
         showResults: false,
-        shuffledQuestions: []
+        shuffledQuestions: [],
+        difficulty: 'medium' // Default quiz length/difficulty
       }
     };
     
@@ -952,8 +1124,15 @@
     
     // Memory Game
     function initMemoryGame() {
-      // Get a subset of terms based on difficulty (default: easy = 8 pairs)
-      const gameTerms = app.terms.slice(0, 8);
+      // Get appropriate number of terms based on difficulty
+      const difficultyLevels = {
+        easy: 6,     // 6 pairs (12 cards)
+        medium: 10,  // 10 pairs (20 cards)
+        hard: 15     // 15 pairs (30 cards)
+      };
+      
+      const numPairs = difficultyLevels[app.memory.difficulty] || difficultyLevels.easy;
+      const gameTerms = shuffleArray([...app.terms]).slice(0, numPairs);
       
       // Create and shuffle the cards
       const cardPairs = [];
@@ -987,7 +1166,7 @@
     }
     
     function renderMemoryGame() {
-      const { cards, matchedPairs, turns } = app.memory;
+      const { cards, matchedPairs, turns, difficulty } = app.memory;
       
       if (cards.length === 0) {
         elements.mainContent.innerHTML = `
@@ -1001,10 +1180,43 @@
       
       const gameCompleted = matchedPairs === cards.length / 2;
       
+      // Determine grid layout based on difficulty
+      let gridLayout = 'grid-cols-4'; // default for easy
+      
+      if (difficulty === 'medium') {
+        gridLayout = 'grid-cols-5';
+      } else if (difficulty === 'hard') {
+        gridLayout = 'grid-cols-6';
+      }
+      
       const memoryGameHTML = `
         <div class="text-center mb-6">
-          <button class="btn-primary mb-4" onclick="resetMemoryGame()">New Game</button>
-          <p>Turns: ${turns} | Pairs: ${matchedPairs} / ${cards.length / 2}</p>
+          <div class="flex flex-wrap justify-center gap-2 mb-4">
+            <button class="btn-primary" onclick="resetMemoryGame()">New Game</button>
+            
+            <div class="flex bg-white rounded shadow overflow-hidden">
+              <button 
+                onclick="changeDifficulty('easy')" 
+                class="px-3 py-2 ${difficulty === 'easy' ? 'bg-green-500 text-white' : 'hover:bg-gray-100'}"
+              >
+                Easy (6 pairs)
+              </button>
+              <button 
+                onclick="changeDifficulty('medium')" 
+                class="px-3 py-2 ${difficulty === 'medium' ? 'bg-yellow-500 text-white' : 'hover:bg-gray-100'}"
+              >
+                Medium (10 pairs)
+              </button>
+              <button 
+                onclick="changeDifficulty('hard')" 
+                class="px-3 py-2 ${difficulty === 'hard' ? 'bg-red-500 text-white' : 'hover:bg-gray-100'}"
+              >
+                Hard (15 pairs)
+              </button>
+            </div>
+          </div>
+          
+          <p>Turns: ${turns} | Pairs: ${matchedPairs} / ${cards.length / 2} | Difficulty: ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}</p>
           ${gameCompleted ? `
             <div class="card mt-4 mb-4" style="background-color: #d1fae5;">
               <p class="text-success-color font-bold">Congratulations! You've matched all the pairs in ${turns} turns!</p>
@@ -1012,7 +1224,7 @@
           ` : ''}
         </div>
         
-        <div class="memory-grid">
+        <div class="memory-grid ${gridLayout}" style="max-width: ${difficulty === 'hard' ? '1000px' : difficulty === 'medium' ? '800px' : '600px'}">
           ${cards.map((card, index) => `
             <div class="memory-card ${card.isFlipped ? 'flipped' : ''} ${card.isMatched ? 'matched' : ''}" 
                 onclick="flipMemoryCard(${index})" data-index="${index}">
@@ -1072,6 +1284,12 @@
       renderMemoryGame();
     }
     
+    function changeDifficulty(newDifficulty) {
+      app.memory.difficulty = newDifficulty;
+      initMemoryGame();
+      renderMemoryGame();
+    }
+    
     // Quiz
     function initQuiz() {
       // Reset quiz state
@@ -1081,12 +1299,25 @@
       app.quiz.isAnswered = false;
       app.quiz.showResults = false;
       
-      // Shuffle questions
-      app.quiz.shuffledQuestions = shuffleArray([...app.quizQuestions]).slice(0, 10); // Limit to 10 questions
+      // Get all questions and shuffle them
+      const allQuestions = shuffleArray([...app.quizQuestions]);
+      
+      // Determine how many questions to use based on difficulty
+      let questionCount;
+      if (app.quiz.difficulty === 'short') {
+        questionCount = 10;
+      } else if (app.quiz.difficulty === 'medium') {
+        questionCount = 15;
+      } else { // 'full'
+        questionCount = allQuestions.length;
+      }
+      
+      // Limit to the determined number of questions
+      app.quiz.shuffledQuestions = allQuestions.slice(0, questionCount);
     }
     
     function renderQuiz() {
-      const { currentQuestion, score, selectedAnswer, isAnswered, showResults, shuffledQuestions } = app.quiz;
+      const { currentQuestion, score, selectedAnswer, isAnswered, showResults, shuffledQuestions, difficulty } = app.quiz;
       
       if (shuffledQuestions.length === 0) {
         elements.mainContent.innerHTML = `
@@ -1101,15 +1332,33 @@
       if (showResults) {
         // Show quiz results
         const percentage = Math.round((score / shuffledQuestions.length) * 100);
+        let feedback;
+        
+        if (percentage >= 90) {
+          feedback = "Outstanding! You have excellent knowledge of identity terms!";
+        } else if (percentage >= 75) {
+          feedback = "Great job! You have strong knowledge of identity concepts.";
+        } else if (percentage >= 60) {
+          feedback = "Good work! You're familiar with most identity terms.";
+        } else if (percentage >= 40) {
+          feedback = "Nice effort! Continue studying to improve your knowledge.";
+        } else {
+          feedback = "Keep practicing! These concepts will become more familiar with study.";
+        }
         
         const resultsHTML = `
           <div class="quiz-container card text-center">
             <h2 class="text-2xl font-bold mb-4">Quiz Complete!</h2>
-            <p class="text-xl mb-6">
+            <p class="text-xl mb-2">
               You scored ${score} out of ${shuffledQuestions.length}
               <span class="block mt-2 text-lg">(${percentage}%)</span>
             </p>
-            <button class="btn-primary" onclick="restartQuiz()">Restart Quiz</button>
+            <p class="mb-6">${feedback}</p>
+            
+            <div class="flex justify-center gap-3">
+              <button class="btn-primary" onclick="restartQuiz()">Restart Quiz</button>
+              <button class="btn-secondary" onclick="goToMenu()">Back to Menu</button>
+            </div>
           </div>
         `;
         
@@ -1121,9 +1370,19 @@
         
         const questionHTML = `
           <div class="quiz-container">
-            <div class="flex justify-between items-center mb-2">
-              <span>Question ${currentQuestion + 1} of ${shuffledQuestions.length}</span>
-              <span>Score: ${score}/${currentQuestion}</span>
+            <div class="flex flex-wrap justify-between items-center mb-4">
+              <div>
+                <span>Question ${currentQuestion + 1} of ${shuffledQuestions.length}</span>
+                <span class="ml-4">Score: ${score}/${currentQuestion}</span>
+              </div>
+              
+              <div class="mt-2 sm:mt-0">
+                <select onchange="changeQuizLength(this.value)" class="px-2 py-1 border rounded">
+                  <option value="short" ${difficulty === 'short' ? 'selected' : ''}>Short Quiz (10 Q)</option>
+                  <option value="medium" ${difficulty === 'medium' ? 'selected' : ''}>Medium Quiz (15 Q)</option>
+                  <option value="full" ${difficulty === 'full' ? 'selected' : ''}>Full Quiz (${app.quizQuestions.length} Q)</option>
+                </select>
+              </div>
             </div>
             
             <div class="quiz-progress">
@@ -1139,7 +1398,7 @@
                     class="quiz-option ${isAnswered ? 
                       (option === question.correctAnswer ? 'correct' : 
                        option === selectedAnswer ? 'incorrect' : '') : ''}" 
-                    onclick="selectAnswer('${option}')"
+                    onclick="selectAnswer('${option.replace(/'/g, "\\'")}')"
                     ${isAnswered ? 'disabled' : ''}
                   >
                     ${option}
@@ -1200,6 +1459,12 @@
     }
     
     function restartQuiz() {
+      initQuiz();
+      renderQuiz();
+    }
+    
+    function changeQuizLength(length) {
+      app.quiz.difficulty = length;
       initQuiz();
       renderQuiz();
     }
